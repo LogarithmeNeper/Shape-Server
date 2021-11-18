@@ -1,10 +1,10 @@
 name:                shape-server
 version:             0.1.0.0
-github:              "githubuser/shape-server"
+github:              "LogarithmeNeper/shape-server"
 license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2021 Author name here"
+author:              "Pierre Sibut-Bourde"
+maintainer:          "sibutbop@tcd.ie"
+copyright:           "2021 Pierre Sibut-Bourde"
 
 extra-source-files:
 - README.md
@@ -21,7 +21,9 @@ description:         Please see the README on GitHub at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
+- blaze-html
 - scotty
+- JuicyPixels
 
 library:
   source-dirs: src
