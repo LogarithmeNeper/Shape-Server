@@ -26,6 +26,8 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Render
+      Shapes
       Utils
   other-modules:
       Paths_shape_server
