@@ -26,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Utils
   other-modules:
       Paths_shape_server
   hs-source-dirs:
