@@ -3,7 +3,7 @@ module Shapes(
   point, projectX, projectY, norm, dot,
   empty, circle, square, rectangle, ellipse, polygon,
   identity, translate, rotate, scale, (<+>),
-  inside)  where
+  inside, gradientColour)  where
 
 import Codec.Picture (PixelRGB8 (PixelRGB8))
 
@@ -113,12 +113,6 @@ transform (Compose transform1 transform2) point = transform transform2 $ transfo
 type Drawing = [(Transform,Shape)]
 
 -- interpretation function for drawings
-inside :: Point -> Drawing -> Bool
-inside point = any (inside1 point)
-
-inside1 :: Point -> (Transform, Shape) -> Bool
-inside1 point (t, s) = insides (transform t point) s
-
 insides :: Point -> Shape -> Bool
 p `insides` Empty = False
 p `insides` Circle = distance p <= 1
@@ -182,10 +176,16 @@ gradientRectangle :: Point -> Double -> Double -> PixelRGB8
 gradientRectangle (Vector x y) w h = PixelRGB8 0 g 0
     where g = round (maxnorm (Vector (x/w) (y/h))) * 255
 
-gradientEllipse :: Point -> Double -> Double -> PixelRGB8 
+gradientEllipse :: Point -> Double -> Double -> PixelRGB8
 gradientEllipse (Vector x y) rHorizontal rVertical = PixelRGB8 r 0 0
     where r = round (distance (Vector (x/rHorizontal) (y/rVertical))) * 255
 
-gradientPolygon :: Point -> [Point] -> PixelRGB8 
+gradientPolygon :: Point -> [Point] -> PixelRGB8
 gradientPolygon point [] = error "The polygon is not well-defined"
 gradientPolygon (Vector x y) (h:q) = PixelRGB8 0 0 255
+
+inside1 :: Point -> (Transform, Shape) -> Maybe PixelRGB8
+inside1 point (t, s) = gradientColour (transform t point) s
+
+inside :: Point -> Drawing -> [Maybe PixelRGB8]
+inside p = map (inside1 p)
