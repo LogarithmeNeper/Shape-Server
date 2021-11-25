@@ -18,7 +18,6 @@ main = scotty 3000 $ do
   get "/img/output.png" $ do
     file "img/output.png"
 
-
 home :: Text
 home = do R.renderHtml $ do H.a H.! A.href "/img" $ H.span "Texte"
 
