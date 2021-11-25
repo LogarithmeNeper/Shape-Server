@@ -1,7 +1,7 @@
 module Shapes(
   Shape, Point, Vector, Transform, Drawing,
   point, projectX, projectY, norm, dot,
-  empty, circle, square,
+  empty, circle, square, rectangle, ellipse, polygon,
   identity, translate, rotate, scale, (<+>),
   inside)  where
 
