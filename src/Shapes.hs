@@ -135,8 +135,12 @@ insideEllipse (Vector x y) rHorizontal rVertical = distance (Vector scaleX scale
         scaleX = x/rHorizontal
         scaleY = y/rVertical
 
---TODO
 insidePolygon :: Point -> [Point] -> Bool
+-- sanity check
+insidePolygon p [] = False
+insidePolygon p [t] = False
+insidePolygon p [t1,t2] = False
+-- case of a real polygon
 insidePolygon p (t1:t2:lst) = insidePolygonTransformedList p (t1:t2:lst++[t1,t2])
 
 insidePolygonTransformedList :: Point -> [Point] -> Bool 
