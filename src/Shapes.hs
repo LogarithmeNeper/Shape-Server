@@ -202,5 +202,8 @@ filterList ((p, h):q) = case p of
     Just x -> (x, h):filterList q
     Nothing -> filterList q
 
-getPixelColour :: [(PixelRGB8, Int)] -> PixelRGB8 
-getPixelColour lst = fst (head (sortOn (Down . snd) lst))
+getPixelColourFromList :: [(PixelRGB8, Int)] -> PixelRGB8 
+getPixelColourFromList lst = fst (head (sortOn (Down . snd) lst))
+
+getPixelColour :: Point -> Drawing -> PixelRGB8 
+getPixelColour p lst = getPixelColourFromList (filterList (inside p lst))
