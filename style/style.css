@@ -1,8 +1,24 @@
-p {
-    color: red;
-    text-align: center;
-  } 
-
 body {
-    background-color: cyan;
+  background-color: lightgrey;
+}
+
+h1 {
+  color: red;
+  text-align: center;
+} 
+
+p {
+  color: grey;
+  text-align: center;
+}
+
+a {
+  color: blue;
+}
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
 }
