@@ -6,6 +6,8 @@ module Shapes(
   inside, gradientColour)  where
 
 import Codec.Picture (PixelRGB8 (PixelRGB8))
+import Data.List (sortOn)
+import Data.Ord (Down(Down))
 
 -- Basic Class of vectors
 data Vector = Vector Double Double
@@ -78,6 +80,7 @@ ellipse = Ellipse
 polygon :: [Point] -> Shape
 polygon = Polygon
 
+-- Hierarchy shape to apply a hierarchy mask : from different images we gonna choose the color of the one with the ... index.
 type HierarchyShape = (Shape, Int)
 
 -- Working on shapes
@@ -112,7 +115,7 @@ transform (Rotate matrix) point = invert matrix `prod` point
 transform (Compose transform1 transform2) point = transform transform2 $ transform transform1 point
 
 -- Drawings
-type Drawing = [(Transform,Shape)]
+type Drawing = [(Transform, HierarchyShape)]
 
 -- interpretation function for drawings
 insides :: Point -> Shape -> Bool
@@ -186,8 +189,18 @@ gradientPolygon :: Point -> [Point] -> PixelRGB8
 gradientPolygon point [] = error "The polygon is not well-defined"
 gradientPolygon (Vector x y) (h:q) = PixelRGB8 0 0 255
 
-inside1 :: Point -> (Transform, Shape) -> Maybe PixelRGB8
-inside1 point (t, s) = gradientColour (transform t point) s
+inside1 :: Point -> (Transform, HierarchyShape) -> (Maybe PixelRGB8, Int)
+inside1 point (t, (s, h)) = (gradientColour (transform t point) s, h)
 
-inside :: Point -> Drawing -> [Maybe PixelRGB8]
-inside p = map (inside1 p)
+inside :: Point -> Drawing -> [(Maybe PixelRGB8, Int)]
+inside p [] = []
+inside p [transform, (shape, hierarchy)] = map (inside1 p) [transform, (shape, hierarchy)]
+
+filterList ::  [(Maybe PixelRGB8, Int)] -> [(PixelRGB8, Int)]
+filterList [] = []
+filterList ((p, h):q) = case p of
+    Just x -> (x, h):filterList q
+    Nothing -> filterList q
+
+getPixelColour :: [(PixelRGB8, Int)] -> PixelRGB8 
+getPixelColour lst = fst (head (sortOn (Down . snd) lst))
