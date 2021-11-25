@@ -1,4 +1,9 @@
--- Basics for shape definitions
+module Shapes(
+  Shape, Point, Vector, Transform, Drawing,
+  point, projectX, projectY, norm, dot, 
+  empty, circle, square,
+  identity, translate, rotate, scale, (<+>),
+  inside)  where
 
 -- Basic Class of vectors
 data Vector = Vector Double Double
@@ -102,3 +107,40 @@ transform (Translate (Vector transx transy)) (Vector x y) = Vector (x-transx) (y
 transform (Scale (Vector scalex scaley)) (Vector x y)  = Vector (x/scalex)  (y/scaley)
 transform (Rotate matrix) point = invert matrix `prod` point
 transform (Compose transform1 transform2) point = transform transform2 $ transform transform1 point
+
+-- Drawings
+type Drawing = [(Transform,Shape)]
+
+-- interpretation function for drawings
+inside :: Point -> Drawing -> Bool
+inside point = any (inside1 point)
+
+inside1 :: Point -> (Transform, Shape) -> Bool
+inside1 point (t, s) = insides (transform t point) s
+
+insides :: Point -> Shape -> Bool
+p `insides` Empty = False
+p `insides` Circle = distance p <= 1
+p `insides` Square = maxnorm p <= 1
+p `insides` Rectangle w h = insideRectangle p w h
+p `insides` Ellipse rHorizontal rVertical = insideEllipse p rHorizontal rVertical
+p `insides` Polygon lst = insidePolygon p lst
+
+insideRectangle :: Point -> Double -> Double -> Bool 
+insideRectangle (Vector x y) w h = abs x <= w && abs y <= h 
+
+insideEllipse :: Point -> Double -> Double -> Bool
+insideEllipse (Vector x y) rHorizontal rVertical = distance (Vector scaleX scaleY) <= 1
+    where 
+        scaleX = x/rHorizontal
+        scaleY = y/rVertical
+
+-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+insidePolygon :: Point -> [Point] -> Bool 
+insidePolygon p lst = True 
+
+distance :: Point -> Double
+distance (Vector x y) = sqrt (x**2 + y**2)
+
+maxnorm :: Point -> Double
+maxnorm (Vector x y) = max (abs x) (abs y)
