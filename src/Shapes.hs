@@ -5,6 +5,8 @@ module Shapes(
   identity, translate, rotate, scale, (<+>),
   inside)  where
 
+import Codec.Picture (PixelRGB8 (PixelRGB8))
+
 -- Basic Class of vectors
 data Vector = Vector Double Double
     deriving Show
@@ -54,7 +56,6 @@ point :: Double -> Double -> Point
 point = vector
 
 -- Shapes
-
 data Shape = Empty
     | Circle
     | Square
@@ -124,7 +125,7 @@ p `insides` Circle = distance p <= 1
 p `insides` Square = maxnorm p <= 1
 p `insides` Rectangle w h = insideRectangle p w h
 p `insides` Ellipse rHorizontal rVertical = insideEllipse p rHorizontal rVertical
-p `insides` Polygon lst = insidePolygon p lst
+p `insides` Polygon lstOfPoints = insidePolygon p lstOfPoints
 
 insideRectangle :: Point -> Double -> Double -> Bool
 insideRectangle (Vector x y) w h = abs x <= w && abs y <= h
@@ -143,7 +144,7 @@ insidePolygon p [t1,t2] = False
 -- case of a real polygon
 insidePolygon p (t1:t2:lst) = insidePolygonTransformedList p (t1:t2:lst++[t1,t2])
 
-insidePolygonTransformedList :: Point -> [Point] -> Bool 
+insidePolygonTransformedList :: Point -> [Point] -> Bool
 -- sanity check
 insidePolygonTransformedList p [] = False
 insidePolygonTransformedList p [t] = False
@@ -166,3 +167,25 @@ distance (Vector x y) = sqrt (x**2 + y**2)
 
 maxnorm :: Point -> Double
 maxnorm (Vector x y) = max (abs x) (abs y)
+
+-- Colours
+
+gradientColour :: Point -> Shape -> Maybe PixelRGB8
+gradientColour point Empty = Nothing
+gradientColour point Circle = if point `insides` Circle then Just (PixelRGB8 (round (distance point) * 255) 0 0) else Nothing
+gradientColour point Square = if point `insides` Square then Just (PixelRGB8 0 (round (maxnorm point) * 255) 0) else Nothing
+gradientColour point (Rectangle w h) = if point `insides` Rectangle w h then Just (gradientRectangle point w h) else Nothing
+gradientColour point (Ellipse rHorizontal rVertical) = if point `insides` Ellipse rHorizontal rVertical then Just (gradientEllipse point rHorizontal rVertical) else Nothing
+gradientColour point (Polygon lstOfPoints) = if point `insides` Polygon lstOfPoints then Just (gradientPolygon point lstOfPoints) else Nothing
+
+gradientRectangle :: Point -> Double -> Double -> PixelRGB8
+gradientRectangle (Vector x y) w h = PixelRGB8 0 g 0
+    where g = round (maxnorm (Vector (x/w) (y/h))) * 255
+
+gradientEllipse :: Point -> Double -> Double -> PixelRGB8 
+gradientEllipse (Vector x y) rHorizontal rVertical = PixelRGB8 r 0 0
+    where r = round (distance (Vector (x/rHorizontal) (y/rVertical))) * 255
+
+gradientPolygon :: Point -> [Point] -> PixelRGB8 
+gradientPolygon point [] = error "The polygon is not well-defined"
+gradientPolygon (Vector x y) (h:q) = PixelRGB8 0 0 255
