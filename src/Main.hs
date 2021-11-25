@@ -10,7 +10,7 @@ import qualified Text.Blaze.Html.Renderer.Text as R
 
 main = scotty 3000 $ do
   get "/" $ do
-    html $ link
+    html $ home
   
   get "/img" $ do
     html $ display
@@ -18,11 +18,9 @@ main = scotty 3000 $ do
   get "/img/output.png" $ do
     file "img/output.png"
 
-link :: Text
-link = do R.renderHtml $ do myList
 
-myList :: H.Html
-myList = H.a H.! A.href "/img" $ H.span "Texte"
+home :: Text
+home = do R.renderHtml $ do H.a H.! A.href "/img" $ H.span "Texte"
 
 display :: Text
 display = do R.renderHtml $ do myImage
