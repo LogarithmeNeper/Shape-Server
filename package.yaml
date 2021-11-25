@@ -24,6 +24,7 @@ dependencies:
 - blaze-html
 - scotty
 - JuicyPixels
+- text
 
 library:
   source-dirs: src
