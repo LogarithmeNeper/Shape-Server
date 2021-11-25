@@ -47,6 +47,14 @@ invert :: Matrix -> Matrix
 invert (Matrix (Vector a b) (Vector c d)) = Matrix (Vector (d/det) (-b/det)) (Vector (-c/det) (a/det))
     where det = a*d-b*c
 
+multiply :: Matrix -> Matrix -> Matrix
+multiply (Matrix (Vector a b) (Vector c d)) (Matrix (Vector e f) (Vector g h)) = (Matrix (Vector i j) (Vector k l))
+    where 
+        i = a*e + b*g
+        j = a*f + b*h
+        k = c*e + d*g
+        l = c*f + d*h
+
 -- Matrix / Vector operations
 prod :: Matrix -> Vector -> Vector
 prod (Matrix r1 r2) v = Vector (dot r1 v) (dot r2 v)
@@ -104,8 +112,11 @@ rotate :: Double -> Transform
 rotate angle = Rotate $ rotationMatrix angle
 
 (<+>) :: Transform -> Transform -> Transform
+(Rotate matrix1) <+> (Rotate matrix2) = Rotate (matrix1 `multiply` matrix2)
+(Translate (Vector x y)) <+> (Translate (Vector x' y')) = translate (Vector (x+x') (y+y'))
+(Scale (Vector x y)) <+> (Scale (Vector x' y')) = Scale (Vector (x*x') (y*y'))
 t0 <+> t1 = Compose t0 t1
-
+ 
 -- Explicit definitions
 transform :: Transform -> Point -> Point
 transform Identity p = p

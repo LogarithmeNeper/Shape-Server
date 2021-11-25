@@ -1,6 +1,6 @@
 # shape-server
 
-This project is the first assignment of the module CSU44012-202122, Topics in functional programming, in Trinity College Dublin, under the supervision of Mr. Glenn Strong.
+This project is the first assignment of the module CSU44012-202122, Topics in functional programming, in Trinity College Dublin, under the supervision of Mr. Glenn Strong. See below for building and launching the app.
 
 ## Assignment
 
