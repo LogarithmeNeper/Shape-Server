@@ -31,7 +31,7 @@ library:
 executables:
   shape-server-exe:
     main:                Main.hs
-    source-dirs:         app
+    source-dirs:         src
     ghc-options:
     - -threaded
     - -rtsopts

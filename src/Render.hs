@@ -1,6 +1,6 @@
 module Render(Window,defaultWindow,samples,render) where
-import Codec.Picture ( writePng, generateImage, Pixel8, PixelRGB8(PixelRGB8))
-import Shapes (Point, projectX, projectY, point, Drawing, inside)
+import Codec.Picture ( writePng, generateImage, Pixel8, PixelRGB8 (PixelRGB8))
+import Shapes
 
 data Window = Window Point Point (Int,Int)
 
@@ -32,9 +32,11 @@ render :: String -> Window -> Drawing -> IO ()
 render path win sh = writePng path $ generateImage pixRenderer w h
     where
       Window _ _ (w,h) = win
-      pixRenderer x y = PixelRGB8 c c c where c = colorForImage $ mapPoint win (x,y)
+      pixRenderer :: Int -> Int -> PixelRGB8
+      pixRenderer x y = colorForImage $ mapPoint win (x,y)
 
-      colorForImage :: Point -> Pixel8
-      colorForImage p | p `inside` sh = 255
-                      | otherwise     = 0
+      colorForImage :: Point -> PixelRGB8
+      colorForImage p = case gradientColour p sh of 
+        Just x -> x
+        Nothing -> PixelRGB8 0 0 0
 
