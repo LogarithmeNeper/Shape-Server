@@ -28,7 +28,6 @@ library
       Lib
       Render
       Shapes
-      Utils
   other-modules:
       Paths_shape_server
   hs-source-dirs:

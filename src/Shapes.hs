@@ -1,6 +1,6 @@
 module Shapes(
   Shape, Point, Vector, Transform, Drawing,
-  point, projectX, projectY, norm, dot, 
+  point, projectX, projectY, norm, dot,
   empty, circle, square,
   identity, translate, rotate, scale, (<+>),
   inside)  where
@@ -126,18 +126,25 @@ p `insides` Rectangle w h = insideRectangle p w h
 p `insides` Ellipse rHorizontal rVertical = insideEllipse p rHorizontal rVertical
 p `insides` Polygon lst = insidePolygon p lst
 
-insideRectangle :: Point -> Double -> Double -> Bool 
-insideRectangle (Vector x y) w h = abs x <= w && abs y <= h 
+insideRectangle :: Point -> Double -> Double -> Bool
+insideRectangle (Vector x y) w h = abs x <= w && abs y <= h
 
 insideEllipse :: Point -> Double -> Double -> Bool
 insideEllipse (Vector x y) rHorizontal rVertical = distance (Vector scaleX scaleY) <= 1
-    where 
+    where
         scaleX = x/rHorizontal
         scaleY = y/rVertical
 
--- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-insidePolygon :: Point -> [Point] -> Bool 
-insidePolygon p lst = True 
+--TODO
+insidePolygon :: Point -> [Point] -> Bool
+insidePolygon p lst = True
+
+-- <ABC
+anglePoints :: Point -> Point -> Point -> Double
+anglePoints (Vector a b) (Vector c d) (Vector e f) = angleVectors (Vector (a-c) (b-d)) (Vector (e-c) (f-d))
+
+angleVectors :: Vector -> Vector -> Double
+angleVectors v1 v2 = acos (dot v1 v2/(norm v1 * norm v2))
 
 distance :: Point -> Double
 distance (Vector x y) = sqrt (x**2 + y**2)
