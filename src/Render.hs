@@ -36,7 +36,4 @@ render path win sh = writePng path $ generateImage pixRenderer w h
       pixRenderer x y = colorForImage $ mapPoint win (x,y)
 
       colorForImage :: Point -> PixelRGB8
-      colorForImage p = case gradientColour p sh of 
-        Just x -> x
-        Nothing -> PixelRGB8 0 0 0
-
+      colorForImage p = getPixelColour p sh

@@ -3,9 +3,11 @@ module Shapes(
   point, projectX, projectY, norm, dot,
   empty, circle, square, rectangle, ellipse, polygon,
   identity, translate, rotate, scale, (<+>),
-  inside, gradientColour)  where
+  inside, shapeColour, getPixelColour)  where
 
 import Codec.Picture (PixelRGB8 (PixelRGB8))
+import Data.List (sortOn)
+import Data.Ord (Down(Down))
 
 -- Basic Class of vectors
 data Vector = Vector Double Double
@@ -78,6 +80,9 @@ ellipse = Ellipse
 polygon :: [Point] -> Shape
 polygon = Polygon
 
+-- Hierarchy shape to apply a hierarchy mask : from different images we gonna choose the color of the one with the highest index.
+type HierarchyShape = (Shape, PixelRGB8, Int)
+
 -- Working on shapes
 data Transform = Identity
     | Translate Vector
@@ -110,7 +115,7 @@ transform (Rotate matrix) point = invert matrix `prod` point
 transform (Compose transform1 transform2) point = transform transform2 $ transform transform1 point
 
 -- Drawings
-type Drawing = [(Transform,Shape)]
+type Drawing = [(Transform, HierarchyShape)]
 
 -- interpretation function for drawings
 insides :: Point -> Shape -> Bool
@@ -163,29 +168,26 @@ maxnorm :: Point -> Double
 maxnorm (Vector x y) = max (abs x) (abs y)
 
 -- Colours
+shapeColour :: Point -> HierarchyShape -> Maybe PixelRGB8
+shapeColour point (shape, colour, _) = if insides point shape then Just colour else Nothing
 
-gradientColour :: Point -> Shape -> Maybe PixelRGB8
-gradientColour point Empty = Nothing
-gradientColour point Circle = if point `insides` Circle then Just (PixelRGB8 (round (distance point) * 255) 0 0) else Nothing
-gradientColour point Square = if point `insides` Square then Just (PixelRGB8 0 (round (maxnorm point) * 255) 0) else Nothing
-gradientColour point (Rectangle w h) = if point `insides` Rectangle w h then Just (gradientRectangle point w h) else Nothing
-gradientColour point (Ellipse rHorizontal rVertical) = if point `insides` Ellipse rHorizontal rVertical then Just (gradientEllipse point rHorizontal rVertical) else Nothing
-gradientColour point (Polygon lstOfPoints) = if point `insides` Polygon lstOfPoints then Just (gradientPolygon point lstOfPoints) else Nothing
+-- TODO : actually implement a gradient
 
-gradientRectangle :: Point -> Double -> Double -> PixelRGB8
-gradientRectangle (Vector x y) w h = PixelRGB8 0 g 0
-    where g = round (maxnorm (Vector (x/w) (y/h))) * 255
+inside1 :: Point -> (Transform, HierarchyShape) -> (Maybe PixelRGB8, Int)
+inside1 point (t, (s, c, h)) = (shapeColour (transform t point) (s, c, h), h)
 
-gradientEllipse :: Point -> Double -> Double -> PixelRGB8
-gradientEllipse (Vector x y) rHorizontal rVertical = PixelRGB8 r 0 0
-    where r = round (distance (Vector (x/rHorizontal) (y/rVertical))) * 255
+inside :: Point -> Drawing -> [(Maybe PixelRGB8, Int)]
+inside p [] = []
+inside p lst = map (inside1 p) lst
 
-gradientPolygon :: Point -> [Point] -> PixelRGB8
-gradientPolygon point [] = error "The polygon is not well-defined"
-gradientPolygon (Vector x y) (h:q) = PixelRGB8 0 0 255
+filterList ::  [(Maybe PixelRGB8, Int)] -> [(PixelRGB8, Int)]
+filterList [] = []
+filterList ((p, h):q) = case p of
+    Just x -> (x, h) : filterList q
+    Nothing -> (PixelRGB8 0 0 0, -1):filterList q
 
-inside1 :: Point -> (Transform, Shape) -> Maybe PixelRGB8
-inside1 point (t, s) = gradientColour (transform t point) s
+getPixelColourFromList :: [(PixelRGB8, Int)] -> PixelRGB8
+getPixelColourFromList lst = fst (head (sortOn (Down . snd) lst))
 
-inside :: Point -> Drawing -> [Maybe PixelRGB8]
-inside p = map (inside1 p)
+getPixelColour :: Point -> Drawing -> PixelRGB8
+getPixelColour p lst = getPixelColourFromList (filterList (inside p lst))
