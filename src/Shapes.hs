@@ -78,6 +78,8 @@ ellipse = Ellipse
 polygon :: [Point] -> Shape
 polygon = Polygon
 
+type HierarchyShape = (Shape, Int)
+
 -- Working on shapes
 data Transform = Identity
     | Translate Vector
