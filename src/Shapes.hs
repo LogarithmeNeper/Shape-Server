@@ -137,9 +137,20 @@ insideEllipse (Vector x y) rHorizontal rVertical = distance (Vector scaleX scale
 
 --TODO
 insidePolygon :: Point -> [Point] -> Bool
-insidePolygon p lst = True
+insidePolygon p (t1:t2:lst) = insidePolygonTransformedList p (t1:t2:lst++[t1,t2])
 
--- <ABC
+insidePolygonTransformedList :: Point -> [Point] -> Bool 
+-- sanity check
+insidePolygonTransformedList p [] = False
+insidePolygonTransformedList p [t] = False
+insidePolygonTransformedList p [t1,t2] = False
+-- real-life stop
+insidePolygonTransformedList p [t1,t2,t3] = compareAngle p t1 t2 t3
+insidePolygonTransformedList p (t1:t2:t3:lst) = compareAngle p t1 t2 t3 && insidePolygonTransformedList p (t2:t3:lst)
+
+compareAngle :: Point -> Point -> Point -> Point -> Bool
+compareAngle pointTBT side1 center side2 = anglePoints side1 center pointTBT <= anglePoints side1 center side2
+
 anglePoints :: Point -> Point -> Point -> Double
 anglePoints (Vector a b) (Vector c d) (Vector e f) = angleVectors (Vector (a-c) (b-d)) (Vector (e-c) (f-d))
 
