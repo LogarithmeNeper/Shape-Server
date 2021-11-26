@@ -107,9 +107,9 @@ generate = do
   render "img/ellipseRectangleSquare.png" defaultWindow ellipseRectangleSquareDrawing
   -- Everything mixed up
   render "img/firstDrawing.png" defaultWindow firstDrawing
-main = generate
+-- main = generate
+  return ()
 
-{- 
 main = scotty 3000 $ do
   get "/" $ do
     html $ do R.renderHtml $ home
@@ -117,8 +117,69 @@ main = scotty 3000 $ do
   get "/img" $ do
     html $ display
 
-  get "/img/output.png" $ do
-    file "img/output.png"
+  -- getting images for web server
+  get "/img/simpleCircle.png" $ do
+    file "img/simpleCircle.png"
+
+  get "/img/simpleSquare.png" $ do
+    file "img/simpleSquare.png"
+
+  get "/img/simpleRectangle.png" $ do
+    file "img/simpleRectangle.png"
+
+  get "/img/simpleEllipse.png" $ do
+    file "img/simpleEllipse.png"
+
+  get "/img/simplePolygon.png" $ do
+    file "img/simplePolygon.png"
+
+  get "/img/simpleScale.png" $ do
+    file "img/simpleScale.png"
+
+  get "/img/simpleTranslate.png" $ do
+    file "img/simpleTranslate.png"
+
+  get "/img/simpleRotate.png" $ do
+    file "img/simpleRotate.png"
+
+  get "/img/rotateRotate.png" $ do
+    file "img/rotateRotate.png"
+
+  get "/img/rotateTranslate.png" $ do
+    file "img/rotateTranslate.png"
+
+  get "/img/rotateScale.png" $ do
+    file "img/rotateScale.png"
+
+  get "/img/translateRotate.png" $ do
+    file "img/translateRotate.png"
+
+  get "/img/translateTranslate.png" $ do
+    file "img/translateTranslate.png"
+
+  get "/img/translateScale.png" $ do
+    file "img/translateScale.png"
+
+  get "/img/scaleRotate.png" $ do
+    file "img/scaleRotate.png"
+
+  get "/img/scaleTranslate.png" $ do
+    file "img/scaleTranslate.png"
+
+  get "/img/scaleScale.png" $ do
+    file "img/scaleScale.png"
+
+  get "/img/rectangleEllipse.png" $ do
+    file "img/rectangleEllipse.png"
+
+  get "/img/ellipseRectangle.png" $ do
+    file "img/ellipseRectangle.png"  
+
+  get "/img/ellipseRectangleSquare.png" $ do
+    file "img/ellipseRectangleSquare.png"
+
+  get "/img/firstDrawing.png" $ do
+    file "img/firstDrawing.png"
 
   get "/img/lambda.jpg" $ do
     file "img/lambda.jpg"
@@ -152,4 +213,3 @@ display = do R.renderHtml $ do myImage
 
 myImage :: H.Html 
 myImage = H.img H.! A.src "../img/output.png" H.! A.alt "Contemporary art."
--}
