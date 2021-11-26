@@ -11,8 +11,6 @@ import qualified Text.Blaze.Html.Renderer.Text as R
 import Shapes
 import Render (render,defaultWindow)
 import Codec.Picture (PixelRGB8(PixelRGB8))
-import Text.Blaze.Html4.FrameSet.Attributes (start)
-import qualified Render as R
 
 -- Shapes
 simpleCircleDrawing :: Drawing 
@@ -237,9 +235,6 @@ startServer = scotty 3000 $ do
   get "/img/firstDrawing.png" $ do
     file "img/firstDrawing.png"
 
-  get "/img/lambda.jpg" $ do
-    file "img/lambda.jpg"
-
   get "/style/style.css" $ do
     file "style/style.css"
 
@@ -252,7 +247,6 @@ home = do
     H.link H.! A.rel "stylesheet" H.! A.href "style/style.css"
   H.body $ do
     H.h1 "Welcome to our Haskell-written site!"
-    H.img H.! A.src "../img/lambda.jpg" H.! A.alt "Haskell logo"
     H.p "This is a project written (almost) completely in Haskell (except for a CSS file) : it uses an eDSL for Shapes extended from what we saw during lectures."
     H.br 
     H.p "If you found this page, you are at the right place. However, shall you want to look at the code, you can either follow" 
