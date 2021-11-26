@@ -116,7 +116,7 @@ rotate angle = Rotate $ rotationMatrix angle
 (Translate (Vector x y)) <+> (Translate (Vector x' y')) = translate (Vector (x+x') (y+y'))
 (Scale (Vector x y)) <+> (Scale (Vector x' y')) = Scale (Vector (x*x') (y*y'))
 t0 <+> t1 = Compose t0 t1
- 
+
 -- Explicit definitions
 transform :: Transform -> Point -> Point
 transform Identity p = p

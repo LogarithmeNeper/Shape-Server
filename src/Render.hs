@@ -37,3 +37,8 @@ render path win sh = writePng path $ generateImage pixRenderer w h
 
       colorForImage :: Point -> PixelRGB8
       colorForImage p = getPixelColour p sh
+
+rectangleDrawing :: Drawing 
+rectangleDrawing =  [(scale (point 0.5 0.25) <+> translate (point 1.2 0.4), (rectangle 4 1, PixelRGB8 255 0 0, 1)) ]
+
+-- main = render "rectangle.png" defaultWindow rectangleDrawing
