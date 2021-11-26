@@ -241,7 +241,6 @@ inside p lst = map (inside1 p) lst
 -- If the current element is a Nothing value, we add a black pixel with the lowest possible hierarchy (0, given that all values of hierarchy are >0)
 -- We use that function recursively on every possible pixel.
 -- Also, Nothing -> Black pixel lowest hierarchy is used so that we do not actually have an empty list (from which we will get the first element when sorted...)
-inside :: Point -> Drawing -> [(Maybe PixelRGB8, Int)]
 filterList ::  [(Maybe PixelRGB8, Int)] -> [(PixelRGB8, Int)]
 filterList [] = []
 filterList ((p, h):q) = case p of

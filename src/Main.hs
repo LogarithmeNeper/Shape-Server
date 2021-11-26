@@ -185,6 +185,9 @@ startServer = scotty 3000 $ do
   get "/drawing" $ do
     html $ do R.renderHtml $ drawing
 
+  get "/report" $ do
+    html $ do R.renderHtml $ report
+  
   -- Simple GET on img folder (populated by generate function, see above.)
   -- There are 21 of them.
   get "/img/simpleCircle.png" $ do
@@ -252,6 +255,12 @@ startServer = scotty 3000 $ do
 
   get "/style/style.css" $ do
     file "style/style.css"
+  
+  get "/img/lambda.jpg" $ do
+    file "img/lambda.jpg"
+
+  get "/doc/report.pdf" $ do
+    file "doc/report.pdf"
 
 -- Structure taken from lectures
 -- CSS loading from https://mmhaskell.com/blog/2020/3/9/blaze-lightweight-html-generation (better saying where I found it, as I found it quite fun)
@@ -268,6 +277,7 @@ home = do
     -- Welcome page.
     H.h1 "Welcome to our Haskell-written site!"
     H.p "This is a project written (almost) completely in Haskell (except for a CSS file) : it uses an eDSL for Shapes extended from what we saw during lectures."
+    H.img H.! A.src "../img/lambda.jpg" H.! A.alt "Haskell logo" H.! A.width "200" H.! A.height "200"
     H.br 
     H.p "If you found this page, you are at the right place. However, shall you want to look at the code, you can either follow"
     -- Link to GitHub repo (external node).
@@ -280,6 +290,7 @@ home = do
       H.li $ do H.a H.! A.href "/compose-transformations" $ H.span "Composition of Transformations (minimal optimization)"
       H.li $ do H.a H.! A.href "/hierarchy-shapes" $ H.span "Hierarchy of Shapes"
       H.li $ do H.a H.! A.href "/drawing" $ H.span "All together"
+    H.a H.! A.href "/report" $ H.span "See assignment report"
 
 -- The same exact structure applies to other pages, please refer to the above function if needed. Just commenting once on how we get to display an image.
 basicShapes :: H.Html
@@ -429,6 +440,17 @@ drawing = do
     H.p "Drawing."
     H.img H.! A.src "../img/firstDrawing.png" H.! A.alt "Drawing"
     H.p firstDrawingString
+
+-- Just a fun function to display the report on the website ;-)
+report :: H.Html 
+report = do
+  H.head $ do
+    H.title "Report"
+    H.link H.! A.rel "stylesheet" H.! A.href "style/style.css"
+  H.body $ do
+    H.h1 "Assignment report"
+    H.a H.! A.href "/" $ H.span "Go back to main page"
+    H.embed H.! A.src "../doc/report.pdf" H.! A.width "800px" H.! A.height "2100px"
 
 -- Main function : 
 -- Generates the shapes in the img folder, then starts server.
