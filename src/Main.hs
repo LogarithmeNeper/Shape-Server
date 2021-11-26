@@ -120,6 +120,9 @@ startServer = scotty 3000 $ do
   get "/basic-transformations" $ do
     html $ do R.renderHtml $ basicTransformations
 
+  get "compose-transformations" $ do
+    html $ do R.renderHtml $ composeTransformations
+
   -- getting images for web server
   get "/img/simpleCircle.png" $ do
     file "img/simpleCircle.png"
@@ -208,7 +211,7 @@ home = do
     H.ul $ do
       H.li $ do H.a H.! A.href "/basic-shapes" $ H.span "Basic Shapes"
       H.li $ do H.a H.! A.href "/basic-transformations" $ H.span "Basic Transformations"
-      H.li "Third item"
+      H.li $ do H.a H.! A.href "/compose-transformations" $ H.span "Composition of Transformations (minimal optimization)"
     
 basicShapes :: H.Html
 basicShapes = do
@@ -217,7 +220,7 @@ basicShapes = do
     H.link H.! A.rel "stylesheet" H.! A.href "style/style.css"
   H.body $ do
     H.h1 "Basic Shapes"
-    H.p "This page is to present the basic shapes of our project : Circle, Square, Ellipse, Rectangle, Polygon. We display the image and then the code used to generate it."
+    H.p "This page is used to present the basic shapes of our project : Circle, Square, Ellipse, Rectangle, Polygon. We display the image and then the code used to generate it."
     H.br 
     H.a H.! A.href "/" $ H.span "Go back to main page"
     H.p "Circle"
@@ -248,12 +251,12 @@ basicTransformations = do
     H.link H.! A.rel "stylesheet" H.! A.href "style/style.css"
   H.body $ do
     H.h1 "Basic Transformations"
-    H.p "This page is to present the basic transformations of our project : Scale, Translate, Rotate. We display the image and then the code used to generate it."
+    H.p "This page is used to present the basic transformations of our project : Scale, Translate, Rotate. We display the image and then the code used to generate it."
     H.br 
     H.a H.! A.href "/" $ H.span "Go back to main page"
     H.p "Reference Image"
     H.img H.! A.src "../img/simpleRectangle.png" H.! A.alt "Reference image."
-    H.p simpleCircleDrawingString
+    H.p simpleRectangleDrawingString
     H.br
     H.p "Scale"
     H.img H.! A.src "../img/simpleScale.png" H.! A.alt "Simple Scale."
@@ -266,6 +269,59 @@ basicTransformations = do
     H.p "Rotate"
     H.img H.! A.src "../img/simpleRotate.png" H.! A.alt "Simple Rotate."
     H.p simpleRotateDrawingString
+
+composeTransformations :: H.Html 
+composeTransformations = do
+  H.head $ do
+    H.title "Compose Transformations"
+    H.link H.! A.rel "stylesheet" H.! A.href "style/style.css"
+  H.body $ do
+    H.h1 "Compose Transformations"
+    H.p "This page is used to present the compositions transformations of our project. We display the image and then the code used to generate it."
+    H.br 
+    H.a H.! A.href "/" $ H.span "Go back to main page"
+    H.p "Reference Image"
+    H.img H.! A.src "../img/simpleRectangle.png" H.! A.alt "Reference image."
+    H.p simpleRectangleDrawingString
+    H.br
+    -- Rotate
+    H.p "Rotate -> Rotate (optimized)"
+    H.img H.! A.src "../img/rotateRotate.png" H.! A.alt "Rotate -> Rotate."
+    H.p rotateRotateDrawingString
+    H.br
+    H.p "Rotate -> Translate"
+    H.img H.! A.src "../img/rotateTranslate.png" H.! A.alt "Rotate -> Translate."
+    H.p rotateTranslateDrawingString
+    H.br
+    H.p "Rotate -> Scale"
+    H.img H.! A.src "../img/rotateScale.png" H.! A.alt "Rotate -> Scale."
+    H.p rotateScaleDrawingString
+    H.br
+    -- Translate
+    H.p "Translate -> Rotate"
+    H.img H.! A.src "../img/transalteRotate.png" H.! A.alt "Translate -> Rotate."
+    H.p translateRotateDrawingString
+    H.br
+    H.p "Translate -> Translate (optimized)"
+    H.img H.! A.src "../img/translateTranslate.png" H.! A.alt "Translate -> Translate."
+    H.p translateTranslateDrawingString
+    H.br
+    H.p "Translate -> Scale"
+    H.img H.! A.src "../img/translateScale.png" H.! A.alt "Translate -> Scale."
+    H.p rotateScaleDrawingString
+    H.br
+    -- Scale
+    H.p "Scale -> Rotate"
+    H.img H.! A.src "../img/scaleRotate.png" H.! A.alt "Scale -> Rotate."
+    H.p scaleRotateDrawingString
+    H.br
+    H.p "Scale -> Translate"
+    H.img H.! A.src "../img/scaleTranslate.png" H.! A.alt "Scale -> Translate."
+    H.p translateTranslateDrawingString
+    H.br
+    H.p "Scale -> Scale (optimized)"
+    H.img H.! A.src "../img/scaleScale.png" H.! A.alt "Scale -> Scale."
+    H.p scaleScaleDrawingString
 
 main :: IO ()
 main = do generate
