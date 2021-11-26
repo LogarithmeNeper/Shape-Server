@@ -2,6 +2,7 @@
 
 module Main where
 
+-- Necessary imports. 
 import Data.Text.Lazy
 import Web.Scotty
 import qualified Text.Blaze.Html5 as H
@@ -12,49 +13,58 @@ import Shapes
 import Render (render,defaultWindow)
 import Codec.Picture (PixelRGB8(PixelRGB8))
 
+{-
+Main function is at the bottom of the code.
+-}
+
 -- Shapes
+-- Simple drawings (first part)
+-- Circle
 simpleCircleDrawing :: Drawing 
 simpleCircleDrawing = [ (identity, (circle, PixelRGB8 255 0 0, 1)) ]
 simpleCircleDrawingString :: H.Html
 simpleCircleDrawingString = "[ (identity, (circle, PixelRGB8 255 0 0, 1)) ]"
-
+-- Square
 simpleSquareDrawing :: Drawing
 simpleSquareDrawing = [ (identity, (square, PixelRGB8 0 255 0, 1)) ]
 simpleSquareDrawingString :: H.Html
 simpleSquareDrawingString = "[ (identity, (square, PixelRGB8 255 0 0, 1)) ]"
-
+-- Rectangle
 simpleRectangleDrawing :: Drawing
 simpleRectangleDrawing = [ (identity, (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
 simpleRectangleDrawingString :: H.Html
 simpleRectangleDrawingString = "[ (identity, (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
-
+-- Ellipse
 simpleEllipseDrawing :: Drawing
 simpleEllipseDrawing = [ (identity, (ellipse 1 0.25, PixelRGB8 0 255 0, 1)) ]
 simpleEllipseDrawingString :: H.Html
 simpleEllipseDrawingString = "[ (identity, (ellipse 1 0.25, PixelRGB8 0 255 0, 1)) ]"
-
+-- Polygon (not really working)
 simplePolygonDrawing :: Drawing
 simplePolygonDrawing = [ (identity, (polygon [point 0 1, point 0.75 1, point 0.75 (-1), point (-0.75) (-1), point 0.75 (-1)], PixelRGB8 0 255 0, 1)) ]
 simplePolygonDrawingString :: H.Html
 simplePolygonDrawingString = "[ (identity, (polygon [point 0 1, point 0.75 1, point 0.75 (-1), point (-0.75) (-1), point 0.75 (-1)], PixelRGB8 0 255 0, 1)) ]"
 
 -- Transformations
+-- Scale
 simpleScaleDrawing :: Drawing
 simpleScaleDrawing = [ (scale (point 2 0.5), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
 simpleScaleDrawingString :: H.Html
 simpleScaleDrawingString = "[ (scale (point 2 0.5), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
-
+-- Translate
 simpleTranslateDrawing :: Drawing
 simpleTranslateDrawing = [ (translate (point 0.5 0.5), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
 simpleTranslateDrawingString :: H.Html
 simpleTranslateDrawingString = "[ (translate (point 0.5 0.5), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
-
+-- Rotate
 simpleRotateDrawing :: Drawing
 simpleRotateDrawing = [ (rotate 45, (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
 simpleRotateDrawingString :: H.Html
 simpleRotateDrawingString = "[ (rotate 45, (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
 
 -- Composition of transformations
+-- Using every transformation possible of (Rotate, Translate, Scale) (*) (Rotate, Translate, Scale)
+-- Not commenting every single drawing.
 rotateRotateDrawing :: Drawing
 rotateRotateDrawing = [ (rotate 45 <+> rotate 10, (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
 rotateRotateDrawingString :: H.Html
@@ -116,12 +126,13 @@ ellipseRectangleSquareDrawing = [(identity, (ellipse 1 2, PixelRGB8 0 255 0, 1))
 ellipseRectangleSquareDrawingString :: H.Html
 ellipseRectangleSquareDrawingString = "[(identity, (ellipse 1 2, PixelRGB8 0 255 0, 1)), (identity, (rectangle 2 0.5, PixelRGB8 255 0 0, 2)), (identity, (square, PixelRGB8 0 0 255, 3))]"
 
--- Everything mixed up
+-- Everything mixed up : we tried to do a beautiful drawing. Not sure if it is, though.
 firstDrawing :: Drawing
 firstDrawing = [(scale (point 0.5 0.5) <+> translate (point (-2) 0), (rectangle 4 1, PixelRGB8 128 128 128, 1)), (scale (point 0.5 0.5) <+> translate (point 2 0), (rectangle 4 1, PixelRGB8 128 128 128, 2)), (identity, (square, PixelRGB8 36 70 142, 3)), (scale (point 0.66 0.66) <+> rotate 45, (square, PixelRGB8 140 87 156, 4)), (scale (point 0.33 0.33), (square, PixelRGB8 216 9 126, 5)), (scale (point 0.1 0.1),  (circle, PixelRGB8 128 128 128, 6))]
 firstDrawingString :: H.Html
 firstDrawingString = "[(scale (point 0.5 0.5) <+> translate (point (-2) 0), (rectangle 4 1, PixelRGB8 128 128 128, 1)), (scale (point 0.5 0.5) <+> translate (point 2 0), (rectangle 4 1, PixelRGB8 128 128 128, 2)), (identity, (square, PixelRGB8 36 70 142, 3)), (scale (point 0.66 0.66) <+> rotate 45, (square, PixelRGB8 140 87 156, 4)), (scale (point 0.33 0.33), (square, PixelRGB8 216 9 126, 5)), (scale (point 0.1 0.1),  (circle, PixelRGB8 128 128 128, 6))]"
 
+-- This function is used to render every drawing defined before and put it in the img/ folder.
 generate :: IO ()
 generate = do
   -- Shapes
@@ -151,8 +162,11 @@ generate = do
   -- Everything mixed up
   render "img/firstDrawing.png" defaultWindow firstDrawing
 
+-- Starting Scotty server.
 startServer :: IO ()
+-- 3000 will be the port : use localhost:3000/
 startServer = scotty 3000 $ do
+  -- Defining pages with functions used to create HTML using Blaze library. See below for the most interesting parts.
   get "/" $ do
     html $ do R.renderHtml $ home
   
@@ -171,7 +185,8 @@ startServer = scotty 3000 $ do
   get "/drawing" $ do
     html $ do R.renderHtml $ drawing
 
-  -- getting images for web server
+  -- Simple GET on img folder (populated by generate function, see above.)
+  -- There are 21 of them.
   get "/img/simpleCircle.png" $ do
     file "img/simpleCircle.png"
 
@@ -242,23 +257,31 @@ startServer = scotty 3000 $ do
 -- CSS loading from https://mmhaskell.com/blog/2020/3/9/blaze-lightweight-html-generation (better saying where I found it, as I found it quite fun)
 home :: H.Html
 home = do
+  -- Header
   H.head $ do
+    -- Defining title of the page.
     H.title "Shape server"
+    -- Importing CSS.
     H.link H.! A.rel "stylesheet" H.! A.href "style/style.css"
+  -- Body
   H.body $ do
+    -- Welcome page.
     H.h1 "Welcome to our Haskell-written site!"
     H.p "This is a project written (almost) completely in Haskell (except for a CSS file) : it uses an eDSL for Shapes extended from what we saw during lectures."
     H.br 
-    H.p "If you found this page, you are at the right place. However, shall you want to look at the code, you can either follow" 
+    H.p "If you found this page, you are at the right place. However, shall you want to look at the code, you can either follow"
+    -- Link to GitHub repo (external node).
     H.a H.! A.href "https://github.com/LogarithmeNeper/shape-server" $ H.span "this link"
     H.p "or look at the code in your favourite IDE (given that you downloaded it, which is the case). Below are links you can follow to see images, and code used to produce them"
+    -- Navigation menu (links to internal nodes).
     H.ul $ do
       H.li $ do H.a H.! A.href "/basic-shapes" $ H.span "Basic Shapes"
       H.li $ do H.a H.! A.href "/basic-transformations" $ H.span "Basic Transformations"
       H.li $ do H.a H.! A.href "/compose-transformations" $ H.span "Composition of Transformations (minimal optimization)"
       H.li $ do H.a H.! A.href "/hierarchy-shapes" $ H.span "Hierarchy of Shapes"
       H.li $ do H.a H.! A.href "/drawing" $ H.span "All together"
-    
+
+-- The same exact structure applies to other pages, please refer to the above function if needed. Just commenting once on how we get to display an image.
 basicShapes :: H.Html
 basicShapes = do
   H.head $ do
@@ -270,6 +293,7 @@ basicShapes = do
     H.br 
     H.a H.! A.href "/" $ H.span "Go back to main page"
     H.p "Circle"
+    -- Define an img node and use the src attribute with a path, and an attribute alt if the image is not found (normally, it will work as the img folder exists.)
     H.img H.! A.src "../img/simpleCircle.png" H.! A.alt "Simple Circle."
     H.p simpleCircleDrawingString
     H.br
@@ -406,6 +430,8 @@ drawing = do
     H.img H.! A.src "../img/firstDrawing.png" H.! A.alt "Drawing"
     H.p firstDrawingString
 
+-- Main function : 
+-- Generates the shapes in the img folder, then starts server.
 main :: IO ()
 main = do generate
           startServer
