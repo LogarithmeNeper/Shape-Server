@@ -1,3 +1,5 @@
+-- Same exact file from the example given in class except from the last part (see below)
+
 module Render(Window,defaultWindow,samples,render) where
 import Codec.Picture ( writePng, generateImage, Pixel8, PixelRGB8 (PixelRGB8))
 import Shapes
@@ -32,13 +34,10 @@ render :: String -> Window -> Drawing -> IO ()
 render path win sh = writePng path $ generateImage pixRenderer w h
     where
       Window _ _ (w,h) = win
+      -- We actually use a PixelRGB8 instead of a pixel.
       pixRenderer :: Int -> Int -> PixelRGB8
       pixRenderer x y = colorForImage $ mapPoint win (x,y)
 
+      -- Color for image uses the workflow defined in Shapes (see that file for more explanations)
       colorForImage :: Point -> PixelRGB8
       colorForImage p = getPixelColour p sh
-
-rectangleDrawing :: Drawing 
-rectangleDrawing =  [(scale (point 0.5 0.25) <+> translate (point 1.2 0.4), (rectangle 4 1, PixelRGB8 255 0 0, 1)) ]
-
--- main = render "rectangle.png" defaultWindow rectangleDrawing
