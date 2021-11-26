@@ -12,6 +12,7 @@ import Shapes
 import Render (render,defaultWindow)
 import Codec.Picture (PixelRGB8(PixelRGB8))
 import Text.Blaze.Html4.FrameSet.Attributes (start)
+import qualified Render as R
 
 -- Shapes
 simpleCircleDrawing = [ (identity, (circle, PixelRGB8 255 0 0, 1)) ]
@@ -120,8 +121,11 @@ startServer = scotty 3000 $ do
   get "/basic-transformations" $ do
     html $ do R.renderHtml $ basicTransformations
 
-  get "compose-transformations" $ do
+  get "/compose-transformations" $ do
     html $ do R.renderHtml $ composeTransformations
+
+  get "/hierarchy-shapes" $ do
+    html $ do R.renderHtml $ hierarchyShapes
 
   -- getting images for web server
   get "/img/simpleCircle.png" $ do
@@ -212,6 +216,7 @@ home = do
       H.li $ do H.a H.! A.href "/basic-shapes" $ H.span "Basic Shapes"
       H.li $ do H.a H.! A.href "/basic-transformations" $ H.span "Basic Transformations"
       H.li $ do H.a H.! A.href "/compose-transformations" $ H.span "Composition of Transformations (minimal optimization)"
+      H.li $ do H.a H.! A.href "/hierarchy-shapes" $ H.span "Hierarchy of Shapes"
     
 basicShapes :: H.Html
 basicShapes = do
@@ -322,6 +327,29 @@ composeTransformations = do
     H.p "Scale -> Scale (optimized)"
     H.img H.! A.src "../img/scaleScale.png" H.! A.alt "Scale -> Scale."
     H.p scaleScaleDrawingString
+
+hierarchyShapes :: H.Html 
+hierarchyShapes = do
+  H.head $ do
+    H.title "Shapes hierarchy"
+    H.link H.! A.rel "stylesheet" H.! A.href "style/style.css"
+  H.body $ do
+    H.h1 "Hierarchy of Shapes"
+    H.p "This page is used to present the hierarchy for shapes in our project. We display the image and then the code used to generate it."
+    H.br 
+    H.a H.! A.href "/" $ H.span "Go back to main page"
+    H.p "Rectangle < Ellipse"
+    H.img H.! A.src "../img/rectangleEllipse.png" H.! A.alt "Rectangle < Ellipse"
+    H.p rectangleEllipseDrawingString
+    H.br
+    H.p "Ellipse < Rectangle"
+    H.img H.! A.src "../img/ellipseRectangle.png" H.! A.alt "Ellipse < Rectangle"
+    H.p ellipseRectangleDrawingString
+    H.br
+    H.p "Ellipse < Rectangle < Square"
+    H.img H.! A.src "../img/ellipseRectangleSquare.png" H.! A.alt "Ellipse < Rectangle < Square"
+    H.p ellipseRectangleSquareDrawingString
+    H.br
 
 main :: IO ()
 main = do generate
