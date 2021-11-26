@@ -104,19 +104,19 @@ scaleTranslateDrawingString = "[ (scale (point 2 0.5) <+> translate (point 0.5 (
 
 -- Hierarchy for shapes
 rectangleEllipseDrawing :: Drawing
-rectangleEllipseDrawing = [(identity, (rectangle 1 4, PixelRGB8 255 0 0, 1)), (identity, (ellipse 1 4, PixelRGB8 0 255 0, 2))]
+rectangleEllipseDrawing = [(identity, (rectangle 2 0.5, PixelRGB8 255 0 0, 1)), (identity, (ellipse 1 2, PixelRGB8 0 255 0, 2))]
 rectangleEllipseDrawingString :: H.Html
-rectangleEllipseDrawingString = "[(identity, (rectangle 1 4, PixelRGB8 255 0 0, 1)), (identity, (ellipse 1 4, PixelRGB8 0 255 0, 2))]"
+rectangleEllipseDrawingString = "[(identity, (rectangle 2 0.5, PixelRGB8 255 0 0, 1)), (identity, (ellipse 1 2, PixelRGB8 0 255 0, 2))]"
 
 ellipseRectangleDrawing :: Drawing
-ellipseRectangleDrawing = [(identity, (ellipse 1 4, PixelRGB8 0 255 0, 1)), (identity, (rectangle 1 4, PixelRGB8 255 0 0, 2))]
+ellipseRectangleDrawing = [(identity, (ellipse 1 2, PixelRGB8 0 255 0, 1)), (identity, (rectangle 2 0.5, PixelRGB8 255 0 0, 2))]
 ellipseRectangleDrawingString :: H.Html
-ellipseRectangleDrawingString = "[(identity, (ellipse 1 4, PixelRGB8 0 255 0, 1)), (identity, (rectangle 1 4, PixelRGB8 255 0 0, 2))]"
+ellipseRectangleDrawingString = "[(identity, (ellipse 1 2, PixelRGB8 0 255 0, 1)), (identity, (rectangle 2 0.5, PixelRGB8 255 0 0, 2))]"
 
 ellipseRectangleSquareDrawing :: Drawing
-ellipseRectangleSquareDrawing = [(identity, (ellipse 1 4, PixelRGB8 0 255 0, 1)), (identity, (rectangle 1 4, PixelRGB8 255 0 0, 2)), (identity, (square, PixelRGB8 0 0 255, 3))]
+ellipseRectangleSquareDrawing = [(identity, (ellipse 1 2, PixelRGB8 0 255 0, 1)), (identity, (rectangle 2 0.5, PixelRGB8 255 0 0, 2)), (identity, (square, PixelRGB8 0 0 255, 3))]
 ellipseRectangleSquareDrawingString :: H.Html
-ellipseRectangleSquareDrawingString = "[(identity, (ellipse 1 4, PixelRGB8 0 255 0, 1)), (identity, (rectangle 1 4, PixelRGB8 255 0 0, 2)), (identity, (square, PixelRGB8 0 0 255, 3))]"
+ellipseRectangleSquareDrawingString = "[(identity, (ellipse 1 2, PixelRGB8 0 255 0, 1)), (identity, (rectangle 2 0.5, PixelRGB8 255 0 0, 2)), (identity, (square, PixelRGB8 0 0 255, 3))]"
 
 -- Everything mixed up
 firstDrawing :: Drawing
