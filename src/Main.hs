@@ -15,71 +15,114 @@ import Text.Blaze.Html4.FrameSet.Attributes (start)
 import qualified Render as R
 
 -- Shapes
+simpleCircleDrawing :: Drawing 
 simpleCircleDrawing = [ (identity, (circle, PixelRGB8 255 0 0, 1)) ]
+simpleCircleDrawingString :: H.Html
 simpleCircleDrawingString = "[ (identity, (circle, PixelRGB8 255 0 0, 1)) ]"
 
+simpleSquareDrawing :: Drawing
 simpleSquareDrawing = [ (identity, (square, PixelRGB8 0 255 0, 1)) ]
+simpleSquareDrawingString :: H.Html
 simpleSquareDrawingString = "[ (identity, (square, PixelRGB8 255 0 0, 1)) ]"
 
+simpleRectangleDrawing :: Drawing
 simpleRectangleDrawing = [ (identity, (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
+simpleRectangleDrawingString :: H.Html
 simpleRectangleDrawingString = "[ (identity, (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
 
+simpleEllipseDrawing :: Drawing
 simpleEllipseDrawing = [ (identity, (ellipse 1 0.25, PixelRGB8 0 255 0, 1)) ]
+simpleEllipseDrawingString :: H.Html
 simpleEllipseDrawingString = "[ (identity, (ellipse 1 0.25, PixelRGB8 0 255 0, 1)) ]"
 
+simplePolygonDrawing :: Drawing
 simplePolygonDrawing = [ (identity, (polygon [point 0 1, point 0.75 1, point 0.75 (-1), point (-0.75) (-1), point 0.75 (-1)], PixelRGB8 0 255 0, 1)) ]
+simplePolygonDrawingString :: H.Html
 simplePolygonDrawingString = "[ (identity, (polygon [point 0 1, point 0.75 1, point 0.75 (-1), point (-0.75) (-1), point 0.75 (-1)], PixelRGB8 0 255 0, 1)) ]"
 
 -- Transformations
+simpleScaleDrawing :: Drawing
 simpleScaleDrawing = [ (scale (point 2 0.5), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
+simpleScaleDrawingString :: H.Html
 simpleScaleDrawingString = "[ (scale (point 2 0.5), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
 
+simpleTranslateDrawing :: Drawing
 simpleTranslateDrawing = [ (translate (point 0.5 0.5), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
+simpleTranslateDrawingString :: H.Html
 simpleTranslateDrawingString = "[ (translate (point 0.5 0.5), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
 
+simpleRotateDrawing :: Drawing
 simpleRotateDrawing = [ (rotate 45, (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
+simpleRotateDrawingString :: H.Html
 simpleRotateDrawingString = "[ (rotate 45, (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
 
 -- Composition of transformations
+rotateRotateDrawing :: Drawing
 rotateRotateDrawing = [ (rotate 45 <+> rotate 10, (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
+rotateRotateDrawingString :: H.Html
 rotateRotateDrawingString = "[ (rotate 45 <+> rotate 10, (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
 
+translateTranslateDrawing :: Drawing
 translateTranslateDrawing = [ (translate (point 0.5 0.5) <+> translate (point (-0.5) 0), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
+translateTranslateDrawingString :: H.Html
 translateTranslateDrawingString = "[ (translate (point 0.5 0.5) <+> translate (point (-0.5) 0), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
 
+scaleScaleDrawing :: Drawing
 scaleScaleDrawing = [ (scale (point 2 0.5) <+> scale (point 0.5 1), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
+scaleScaleDrawingString :: H.Html
 scaleScaleDrawingString = "[ (scale (point 2 0.5) <+> scale (point 0.5 1), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
 
+rotateTranslateDrawing :: Drawing
 rotateTranslateDrawing = [ (rotate 45 <+> translate (point 0.5 (-0.5)), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
+rotateTranslateDrawingString :: H.Html
 rotateTranslateDrawingString = "[ (rotate 45 <+> translate (point 0.5 (-0.5)), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
 
+rotateScaleDrawing :: Drawing
 rotateScaleDrawing = [ (rotate 45 <+> scale (point 0.5 0.5), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
+rotateScaleDrawingString :: H.Html
 rotateScaleDrawingString = "[ (rotate 45 <+> scale (point 0.5 0.5), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
 
+translateRotateDrawing :: Drawing
 translateRotateDrawing = [ (translate (point 0.5 (-0.5)) <+> rotate 45, (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
+translateRotateDrawingString :: H.Html
 translateRotateDrawingString = "[ (translate (point 0.5 (-0.5)) <+> rotate 45, (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
 
-translateScaleDrawing = [ (rotate 45 <+> scale (point 0.5 (-0.5)), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
-translateScaleDrawingString = "[ (translate (point 0.5 (-0.5)) <+> rotate 45, (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
+translateScaleDrawing :: Drawing
+translateScaleDrawing = [ (translate (point 0.5 (-0.5)) <+> scale (point 0.5 (-0.5)), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
+translateScaleDrawingString :: H.Html
+translateScaleDrawingString = "[ (translate (point 0.5 (-0.5)) <+> scale (point 0.5 (-0.5)), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
 
+scaleRotateDrawing :: Drawing
 scaleRotateDrawing = [ (scale (point 2 0.5) <+> rotate 45, (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
+scaleRotateDrawingString :: H.Html
 scaleRotateDrawingString = "[ (scale (point 2 0.5) <+> rotate 45, (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
 
+scaleTranslateDrawing :: Drawing
 scaleTranslateDrawing = [ (scale (point 2 0.5) <+> translate (point 0.5 (-0.5)), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]
+scaleTranslateDrawingString :: H.Html
 scaleTranslateDrawingString = "[ (scale (point 2 0.5) <+> translate (point 0.5 (-0.5)), (rectangle 1 0.25, PixelRGB8 255 0 0, 1)) ]"
 
 -- Hierarchy for shapes
+rectangleEllipseDrawing :: Drawing
 rectangleEllipseDrawing = [(identity, (rectangle 1 4, PixelRGB8 255 0 0, 1)), (identity, (ellipse 1 4, PixelRGB8 0 255 0, 2))]
+rectangleEllipseDrawingString :: H.Html
 rectangleEllipseDrawingString = "[(identity, (rectangle 1 4, PixelRGB8 255 0 0, 1)), (identity, (ellipse 1 4, PixelRGB8 0 255 0, 2))]"
 
+ellipseRectangleDrawing :: Drawing
 ellipseRectangleDrawing = [(identity, (ellipse 1 4, PixelRGB8 0 255 0, 1)), (identity, (rectangle 1 4, PixelRGB8 255 0 0, 2))]
+ellipseRectangleDrawingString :: H.Html
 ellipseRectangleDrawingString = "[(identity, (ellipse 1 4, PixelRGB8 0 255 0, 1)), (identity, (rectangle 1 4, PixelRGB8 255 0 0, 2))]"
 
+ellipseRectangleSquareDrawing :: Drawing
 ellipseRectangleSquareDrawing = [(identity, (ellipse 1 4, PixelRGB8 0 255 0, 1)), (identity, (rectangle 1 4, PixelRGB8 255 0 0, 2)), (identity, (square, PixelRGB8 0 0 255, 3))]
+ellipseRectangleSquareDrawingString :: H.Html
 ellipseRectangleSquareDrawingString = "[(identity, (ellipse 1 4, PixelRGB8 0 255 0, 1)), (identity, (rectangle 1 4, PixelRGB8 255 0 0, 2)), (identity, (square, PixelRGB8 0 0 255, 3))]"
 
 -- Everything mixed up
+firstDrawing :: Drawing
 firstDrawing = [(scale (point 0.5 0.5) <+> translate (point (-2) 0), (rectangle 4 1, PixelRGB8 128 128 128, 1)), (scale (point 0.5 0.5) <+> translate (point 2 0), (rectangle 4 1, PixelRGB8 128 128 128, 2)), (identity, (square, PixelRGB8 36 70 142, 3)), (scale (point 0.66 0.66) <+> rotate 45, (square, PixelRGB8 140 87 156, 4)), (scale (point 0.33 0.33), (square, PixelRGB8 216 9 126, 5)), (scale (point 0.1 0.1),  (circle, PixelRGB8 128 128 128, 6))]
+firstDrawingString :: H.Html
+firstDrawingString = "[(scale (point 0.5 0.5) <+> translate (point (-2) 0), (rectangle 4 1, PixelRGB8 128 128 128, 1)), (scale (point 0.5 0.5) <+> translate (point 2 0), (rectangle 4 1, PixelRGB8 128 128 128, 2)), (identity, (square, PixelRGB8 36 70 142, 3)), (scale (point 0.66 0.66) <+> rotate 45, (square, PixelRGB8 140 87 156, 4)), (scale (point 0.33 0.33), (square, PixelRGB8 216 9 126, 5)), (scale (point 0.1 0.1),  (circle, PixelRGB8 128 128 128, 6))]"
 
 generate :: IO ()
 generate = do
@@ -126,6 +169,9 @@ startServer = scotty 3000 $ do
 
   get "/hierarchy-shapes" $ do
     html $ do R.renderHtml $ hierarchyShapes
+
+  get "/drawing" $ do
+    html $ do R.renderHtml $ drawing
 
   -- getting images for web server
   get "/img/simpleCircle.png" $ do
@@ -217,6 +263,7 @@ home = do
       H.li $ do H.a H.! A.href "/basic-transformations" $ H.span "Basic Transformations"
       H.li $ do H.a H.! A.href "/compose-transformations" $ H.span "Composition of Transformations (minimal optimization)"
       H.li $ do H.a H.! A.href "/hierarchy-shapes" $ H.span "Hierarchy of Shapes"
+      H.li $ do H.a H.! A.href "/drawing" $ H.span "All together"
     
 basicShapes :: H.Html
 basicShapes = do
@@ -304,7 +351,7 @@ composeTransformations = do
     H.br
     -- Translate
     H.p "Translate -> Rotate"
-    H.img H.! A.src "../img/transalteRotate.png" H.! A.alt "Translate -> Rotate."
+    H.img H.! A.src "../img/translateRotate.png" H.! A.alt "Translate -> Rotate."
     H.p translateRotateDrawingString
     H.br
     H.p "Translate -> Translate (optimized)"
@@ -313,7 +360,7 @@ composeTransformations = do
     H.br
     H.p "Translate -> Scale"
     H.img H.! A.src "../img/translateScale.png" H.! A.alt "Translate -> Scale."
-    H.p rotateScaleDrawingString
+    H.p translateScaleDrawingString
     H.br
     -- Scale
     H.p "Scale -> Rotate"
@@ -322,7 +369,7 @@ composeTransformations = do
     H.br
     H.p "Scale -> Translate"
     H.img H.! A.src "../img/scaleTranslate.png" H.! A.alt "Scale -> Translate."
-    H.p translateTranslateDrawingString
+    H.p scaleTranslateDrawingString
     H.br
     H.p "Scale -> Scale (optimized)"
     H.img H.! A.src "../img/scaleScale.png" H.! A.alt "Scale -> Scale."
@@ -350,6 +397,20 @@ hierarchyShapes = do
     H.img H.! A.src "../img/ellipseRectangleSquare.png" H.! A.alt "Ellipse < Rectangle < Square"
     H.p ellipseRectangleSquareDrawingString
     H.br
+
+drawing :: H.Html 
+drawing = do
+  H.head $ do
+    H.title "Simple Drawing"
+    H.link H.! A.rel "stylesheet" H.! A.href "style/style.css"
+  H.body $ do
+    H.h1 "Simple drawing"
+    H.p "Just a simple page to display a drawing that uses almost everything in the project."
+    H.br 
+    H.a H.! A.href "/" $ H.span "Go back to main page"
+    H.p "Drawing."
+    H.img H.! A.src "../img/firstDrawing.png" H.! A.alt "Drawing"
+    H.p firstDrawingString
 
 main :: IO ()
 main = do generate
