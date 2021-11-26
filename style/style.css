@@ -7,18 +7,6 @@ h1 {
   text-align: center;
 } 
 
-p {
-  color: grey;
-  text-align: center;
-}
-
 a {
   color: blue;
-}
-
-img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
 }
