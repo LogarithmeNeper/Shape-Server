@@ -117,8 +117,8 @@ startServer = scotty 3000 $ do
   get "/basic-shapes" $ do
     html $ do R.renderHtml $ basicShapes
   
-  get "/img" $ do
-    html $ display
+  get "/basic-transformations" $ do
+    html $ do R.renderHtml $ basicTransformations
 
   -- getting images for web server
   get "/img/simpleCircle.png" $ do
@@ -241,11 +241,31 @@ basicShapes = do
     H.p simplePolygonDrawingString
     H.br
 
-display :: Text
-display = do R.renderHtml $ do myImage
-
-myImage :: H.Html 
-myImage = H.img H.! A.src "../img/output.png" H.! A.alt "Contemporary art."
+basicTransformations :: H.Html
+basicTransformations = do
+  H.head $ do
+    H.title "Basic Transformations"
+    H.link H.! A.rel "stylesheet" H.! A.href "style/style.css"
+  H.body $ do
+    H.h1 "Basic Transformations"
+    H.p "This page is to present the basic transformations of our project : Scale, Translate, Rotate. We display the image and then the code used to generate it."
+    H.br 
+    H.a H.! A.href "/" $ H.span "Go back to main page"
+    H.p "Reference Image"
+    H.img H.! A.src "../img/simpleRectangle.png" H.! A.alt "Reference image."
+    H.p simpleCircleDrawingString
+    H.br
+    H.p "Scale"
+    H.img H.! A.src "../img/simpleScale.png" H.! A.alt "Simple Scale."
+    H.p simpleScaleDrawingString
+    H.br
+    H.p "Translate"
+    H.img H.! A.src "../img/simpleTranslate.png" H.! A.alt "Simple Translate."
+    H.p simpleTranslateDrawingString
+    H.br
+    H.p "Rotate"
+    H.img H.! A.src "../img/simpleRotate.png" H.! A.alt "Simple Rotate."
+    H.p simpleRotateDrawingString
 
 main :: IO ()
 main = do generate
