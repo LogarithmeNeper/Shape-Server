@@ -207,7 +207,7 @@ home = do
     H.p "or look at the code in your favourite IDE (given that you downloaded it, which is the case). Below are links you can follow to see images, and code used to produce them"
     H.ul $ do
       H.li $ do H.a H.! A.href "/basic-shapes" $ H.span "Basic Shapes"
-      H.li "Second item"
+      H.li $ do H.a H.! A.href "/basic-transformations" $ H.span "Basic Transformations"
       H.li "Third item"
     
 basicShapes :: H.Html
