@@ -11,6 +11,7 @@ import qualified Text.Blaze.Html.Renderer.Text as R
 import Shapes
 import Render (render,defaultWindow)
 import Codec.Picture (PixelRGB8(PixelRGB8))
+import Text.Blaze.Html4.FrameSet.Attributes (start)
 
 -- Shapes
 simpleCircleDrawing = [ (identity, (circle, PixelRGB8 255 0 0, 1)) ]
@@ -107,12 +108,14 @@ generate = do
   render "img/ellipseRectangleSquare.png" defaultWindow ellipseRectangleSquareDrawing
   -- Everything mixed up
   render "img/firstDrawing.png" defaultWindow firstDrawing
--- main = generate
-  return ()
 
-main = scotty 3000 $ do
+startServer :: IO ()
+startServer = scotty 3000 $ do
   get "/" $ do
     html $ do R.renderHtml $ home
+  
+  get "/basic-shapes" $ do
+    html $ do R.renderHtml $ basicShapes
   
   get "/img" $ do
     html $ display
@@ -192,7 +195,7 @@ main = scotty 3000 $ do
 home :: H.Html
 home = do
   H.head $ do
-    H.title "Our Page"
+    H.title "Shape server"
     H.link H.! A.rel "stylesheet" H.! A.href "style/style.css"
   H.body $ do
     H.h1 "Welcome to our Haskell-written site!"
@@ -203,13 +206,47 @@ home = do
     H.a H.! A.href "https://github.com/LogarithmeNeper/shape-server" $ H.span "this link"
     H.p "or look at the code in your favourite IDE (given that you downloaded it, which is the case). Below are links you can follow to see images, and code used to produce them"
     H.ul $ do
-      H.li $ do H.a H.! A.href "/img" $ H.span "Texte"
+      H.li $ do H.a H.! A.href "/basic-shapes" $ H.span "Basic Shapes"
       H.li "Second item"
       H.li "Third item"
     
+basicShapes :: H.Html
+basicShapes = do
+  H.head $ do
+    H.title "Basic Shapes"
+    H.link H.! A.rel "stylesheet" H.! A.href "style/style.css"
+  H.body $ do
+    H.h1 "Basic Shapes"
+    H.p "This page is to present the basic shapes of our project : Circle, Square, Ellipse, Rectangle, Polygon. We display the image and then the code used to generate it."
+    H.br 
+    H.a H.! A.href "/" $ H.span "Go back to main page"
+    H.p "Circle"
+    H.img H.! A.src "../img/simpleCircle.png" H.! A.alt "Simple Circle."
+    H.p simpleCircleDrawingString
+    H.br
+    H.p "Square"
+    H.img H.! A.src "../img/simpleSquare.png" H.! A.alt "Simple Square."
+    H.p simpleSquareDrawingString
+    H.br
+    H.p "Ellipse"
+    H.img H.! A.src "../img/simpleEllipse.png" H.! A.alt "Simple Ellipse."
+    H.p simpleEllipseDrawingString
+    H.br
+    H.p "Rectangle"
+    H.img H.! A.src "../img/simpleRectangle.png" H.! A.alt "Simple Rectangle."
+    H.p simpleRectangleDrawingString
+    H.br
+    H.p "Polygon"
+    H.img H.! A.src "../img/simplePolygon.png" H.! A.alt "Simple Polygon."
+    H.p simplePolygonDrawingString
+    H.br
 
 display :: Text
 display = do R.renderHtml $ do myImage
 
 myImage :: H.Html 
 myImage = H.img H.! A.src "../img/output.png" H.! A.alt "Contemporary art."
+
+main :: IO ()
+main = do generate
+          startServer
